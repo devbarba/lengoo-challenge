@@ -24,12 +24,14 @@ services:
   lengoo-app:
     build: .
     ports:
-      - "${APP_PORT}:${APP_PORT}"
+        - '${APP_PORT}:${APP_PORT}'
     volumes:
-      - .:/usr/lengoo/app
-      - /usr/lengoo/app/node_modules
-    working_dir: /usr/lengoo/app
-    command: sh -c "npm install && npm run build && npm run start"
+        - .:/usr/lengoo/app
+        - /usr/lengoo/app/node_modules
+    command: sh -c 'npm run build && npm run production'
+    links:
+        - lengoo-mongodb
+        - lengoo-redis
     depends_on:
-      - lengoo-mongodb
-      - lengoo-redis
+        - lengoo-mongodb
+        - lengoo-redis
