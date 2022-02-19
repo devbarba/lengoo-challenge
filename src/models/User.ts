@@ -1,15 +1,16 @@
 import {
     Entity,
     Column,
-    PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
+    ObjectIdColumn,
+    ObjectID,
 } from 'typeorm';
 
 @Entity('users')
 class User {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+    @ObjectIdColumn()
+    _id: ObjectID;
 
     @Column()
     name: string;
