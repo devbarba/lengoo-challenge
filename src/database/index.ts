@@ -1,10 +1,16 @@
 import IConfig from 'src/interfaces/configs';
-import { createConnection, Connection } from 'typeorm';
+import {
+    createConnection,
+    Connection,
+    ConnectionOptions,
+    getConnection,
+} from 'typeorm';
 
 export default async (
     database: IConfig['app']['database']
 ): Promise<Connection> => {
-    return createConnection({
+    const options: ConnectionOptions = {
+        logging: true,
         type: database.type,
         host: database.host,
         port: database.port,
@@ -16,5 +22,20 @@ export default async (
         cli: {
             migrationsDir: './src/database/migrations',
         },
-    });
+    };
+
+    if (process.env.NODE_ENV === 'production') {
+        try {
+            return getConnection(options.name);
+        } catch (error) {
+            return createConnection(options);
+        }
+    } else {
+        try {
+            await getConnection(options.name).close();
+            return createConnection(options);
+        } catch (error) {
+            return createConnection(options);
+        }
+    }
 };
