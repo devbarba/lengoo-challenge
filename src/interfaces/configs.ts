@@ -4,6 +4,17 @@ export default interface IConfig {
         host: string;
         port: number;
         timezone: string;
-        mongo_uri: string;
+        jwt: {
+            secret: string;
+            ttl: string;
+        };
+        database: {
+            type: string;
+            host: string;
+            port: string;
+            name: string;
+            user: string;
+            pass: string;
+        };
     };
 }
