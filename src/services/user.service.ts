@@ -31,10 +31,9 @@ class UserService implements IUserService {
     }: IUser): Promise<User> {
         const userRepository = getRepository(User);
 
-        const user = await userRepository.find({ where: email });
+        const user = await userRepository.findOne({ where: email });
 
-        if (user.length > 0)
-            throw new Handler('email address already used', CONFLICT);
+        if (user) throw new Handler('email address already used', CONFLICT);
 
         const hashedPassword = await hash(password, 8);
 
