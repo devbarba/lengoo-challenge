@@ -2,11 +2,14 @@ import { Router, Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
 
 import UserController from '../controllers/users.controller';
+import ensureAuthenticated from '../middlewares/authenticated.middleware';
 import { verifyFields } from '../utils/helper';
 
 const userController = new UserController();
 
 const usersRouter = Router();
+
+usersRouter.use(ensureAuthenticated);
 
 usersRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
     userController.list({ req, res, next });
