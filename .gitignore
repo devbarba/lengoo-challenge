@@ -1,0 +1,8 @@
+/docker/mongo-volume/*
+!/docker/mongo-volume/.gitkeep
+node_modules
+dist
+.vscode
+.env
+yarn-error.log
+coverage
