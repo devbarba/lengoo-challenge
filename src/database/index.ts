@@ -10,7 +10,7 @@ export default async (
     database: IConfig['app']['database']
 ): Promise<Connection> => {
     const options: ConnectionOptions = {
-        logging: true,
+        logging: false,
         type: database.type,
         host: database.host,
         port: database.port,
@@ -18,10 +18,6 @@ export default async (
         password: database.pass,
         database: database.name,
         entities: ['./src/models/*.ts'],
-        migrations: ['./src/database/migrations/*.ts'],
-        cli: {
-            migrationsDir: './src/database/migrations',
-        },
     };
 
     if (process.env.NODE_ENV === 'production') {
