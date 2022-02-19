@@ -14,20 +14,29 @@ class User {
     @Column()
     name: string;
 
+    @Column({ unique: true })
+    email: string;
+
     @Column()
-    role: 'Client' | 'Admin';
+    role: 'Client' | 'Admin' | string;
 
     @Column()
     active: boolean;
 
     @Column()
-    password: 'income' | 'outcome';
+    password: string;
 
     @CreateDateColumn()
     created_at: Date;
 
     @UpdateDateColumn()
     updated_at: Date;
+
+    toJSON() {
+        // @ts-ignore
+        delete this.password;
+        return this;
+    }
 }
 
 export default User;
