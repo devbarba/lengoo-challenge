@@ -1,0 +1,17 @@
+{
+  "name": "harbs-backend-coding-challenge",
+  "version": "1.0.0",
+  "description": "Lengoo Node.JS Backend Challenge",
+  "main": "dist/server.js",
+  "repository": "git@github.com:lengoo/harbs-backend-coding-challenge.git",
+  "author": "Joao Harbs <harbspj@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "",
+    "start": "",
+    "production": "",
+    "clean": "",
+    "dev": "",
+    "test": ""
+  }
+}
