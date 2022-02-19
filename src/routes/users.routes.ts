@@ -31,4 +31,11 @@ usersRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
     userController.create({ req, res, next });
 });
 
+usersRouter.delete(
+    '/:id',
+    async (req: Request, res: Response, next: NextFunction) => {
+        userController.destroy({ req, res, next });
+    }
+);
+
 export default usersRouter;

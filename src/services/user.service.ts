@@ -9,6 +9,7 @@ import User from '../models/User';
 interface IUserService {
     list(): Promise<User[]>;
     create({ name, email, role, active, password }: IUser): Promise<User>;
+    destroy(id: string): Promise<void>;
 }
 
 class UserService implements IUserService {
@@ -32,7 +33,8 @@ class UserService implements IUserService {
 
         const user = await userRepository.find({ where: email });
 
-        if (user) throw new Handler('email address already used', CONFLICT);
+        if (user.length > 0)
+            throw new Handler('email address already used', CONFLICT);
 
         const hashedPassword = await hash(password, 8);
 
@@ -47,6 +49,16 @@ class UserService implements IUserService {
         await userRepository.save(newUser);
 
         return newUser;
+    }
+
+    public async destroy(id: string): Promise<void> {
+        const userRepository = getRepository(User);
+
+        const user = await userRepository.findOne(id);
+
+        if (!user) throw new Handler('user not found', NOT_FOUND);
+
+        await userRepository.delete(id);
     }
 }
 
