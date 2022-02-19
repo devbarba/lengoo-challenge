@@ -1,6 +1,9 @@
 import fs from 'fs';
+import { BAD_REQUEST, PRECONDITION_FAILED } from 'http-status';
+import Joi from 'joi';
 import path from 'path';
 
+import Handler from '../errors/handler.error';
 import IConfig from '../interfaces/configs';
 
 /**
@@ -66,4 +69,40 @@ const getDir = (folder = ''): string => path.resolve(__dirname, '../', folder);
  */
 const getBaseDir = (folder = ''): string => getDir(folder ? `${folder}` : '');
 
-export { autoloadConfig, getEnv, getDir, getBaseDir };
+/**
+ * getCodes: Return a status code depending the validation error.
+ * @param code string
+ * @returns number
+ */
+const getCodes = (code: string): number => {
+    const givenCodes = {
+        'any.required': PRECONDITION_FAILED,
+        'object.unknown': BAD_REQUEST,
+    };
+
+    return givenCodes[code] ? givenCodes[code] : BAD_REQUEST;
+};
+
+/**
+ * verifyFields: Schema verification with Joi.
+ * @param requiredFields string[]
+ * @param field {}
+ * @returns false | string[]
+ */
+const verifyFields = (
+    body: unknown,
+    schema: Joi.ObjectSchema<unknown>
+): Handler | void => {
+    const schemaValidated = schema.validate(body);
+
+    if (schemaValidated.error && schemaValidated.error.details) {
+        const field = schemaValidated.error.details[0];
+
+        throw new Handler(
+            field.message.replace(/['"]+/g, ''),
+            getCodes(field.type)
+        );
+    }
+};
+
+export { autoloadConfig, getEnv, getDir, getBaseDir, verifyFields };

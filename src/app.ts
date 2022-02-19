@@ -6,6 +6,7 @@ import kueUi from 'kue-ui';
 import cronJob from 'node-cron';
 
 import createConnection from './database';
+import Handler from './errors/handler.error';
 import IConfig from './interfaces/configs';
 import routes from './routes/index';
 import { autoloadConfig, getBaseDir } from './utils/helper';
@@ -69,9 +70,14 @@ class App {
 
     private errorHandling() {
         this.server.use((error, req, res, next) => {
-            return res.status(error.getStatusCode()).json({
-                code: error.getStatusCode(),
-                msg: error.getMessage(),
+            if (error instanceof Handler) {
+                return res.status(error.getStatusCode()).json({
+                    msg: error.getMessage(),
+                });
+            }
+
+            return res.status(500).json({
+                msg: error.message,
             });
         });
     }
