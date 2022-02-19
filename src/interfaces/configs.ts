@@ -10,6 +10,11 @@ export default interface IConfig {
             secret: string;
             ttl: string;
         };
+        redis: {
+            host: string;
+            port: string;
+            pass: string;
+        };
         database: {
             type: MongoConnectionOptions['type'];
             host: MongoConnectionOptions['host'];

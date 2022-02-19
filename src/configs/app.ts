@@ -13,6 +13,11 @@ export default {
         secret: getEnv('JWT_SECRET', '', true),
         ttl: getEnv('JWT_TTL', '', true),
     },
+    redis: {
+        host: getEnv('REDIS_HOST', '', true),
+        port: getEnv('REDIS_PORT', '', true),
+        pass: getEnv('REDIS_PASS', '', true),
+    },
     database: {
         type: getEnv('DB', 'mongodb'),
         host: getEnv('MONGO_HOST', '', true),
