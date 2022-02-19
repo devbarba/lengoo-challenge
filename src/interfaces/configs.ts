@@ -1,3 +1,5 @@
+import { MongoConnectionOptions } from 'typeorm/driver/mongodb/MongoConnectionOptions';
+
 export default interface IConfig {
     app: {
         env: 'development' | 'staging' | 'production';
@@ -9,12 +11,12 @@ export default interface IConfig {
             ttl: string;
         };
         database: {
-            type: string;
-            host: string;
-            port: string;
-            name: string;
-            user: string;
-            pass: string;
+            type: MongoConnectionOptions['type'];
+            host: MongoConnectionOptions['host'];
+            port: MongoConnectionOptions['port'];
+            name: MongoConnectionOptions['database'];
+            user: MongoConnectionOptions['username'];
+            pass: MongoConnectionOptions['password'];
         };
     };
 }
