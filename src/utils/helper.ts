@@ -80,7 +80,7 @@ const getCodes = (code: string): number => {
         'object.unknown': BAD_REQUEST,
     };
 
-    return givenCodes[code] ?? BAD_REQUEST;
+    return givenCodes[code] ? givenCodes[code] : BAD_REQUEST;
 };
 
 /**
