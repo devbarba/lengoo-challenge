@@ -19,12 +19,10 @@ export default {
         pass: getEnv('REDIS_PASS', '', true),
     },
     minio: {
+        host: getEnv('MINIO_HOST', '', true),
         user: getEnv('MINIO_ROOT_USER', '', true),
         pass: getEnv('MINIO_ROOT_PASSWORD', '', true),
-        api: {
-            host: getEnv('MINIO_HOST', '', true),
-            port: getEnv('MINIO_API_PORT', '', true),
-        },
+        bucket: getEnv('MINIO_BUCKET', '', true),
     },
     mailhog: {
         host: getEnv('MAILHOG_HOST', '', true),

@@ -1,3 +1,4 @@
+import { ClientOptions } from 'minio';
 import { MongoConnectionOptions } from 'typeorm/driver/mongodb/MongoConnectionOptions';
 
 export default interface IConfig {
@@ -16,12 +17,10 @@ export default interface IConfig {
             pass: string;
         };
         minio: {
-            user: string;
-            pass: string;
-            api: {
-                host: string;
-                port: string;
-            };
+            host: ClientOptions['endPoint'];
+            user: ClientOptions['accessKey'];
+            pass: ClientOptions['secretKey'];
+            bucket: string;
         };
         mailhog: {
             host: string;
