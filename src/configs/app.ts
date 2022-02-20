@@ -18,6 +18,17 @@ export default {
         port: getEnv('REDIS_PORT', '', true),
         pass: getEnv('REDIS_PASS', '', true),
     },
+    minio: {
+        host: getEnv('MINIO_HOST', '', true),
+        user: getEnv('MINIO_ROOT_USER', '', true),
+        pass: getEnv('MINIO_ROOT_PASSWORD', '', true),
+        bucket: getEnv('MINIO_BUCKET', '', true),
+    },
+    mailhog: {
+        host: getEnv('MAILHOG_HOST', '', true),
+        port: getEnv('MAILHOG_SMTP_PORT', '', true),
+        from: getEnv('MAILHOG_FROM', '', true),
+    },
     database: {
         type: getEnv('DB', 'mongodb'),
         host: getEnv('MONGO_HOST', '', true),
