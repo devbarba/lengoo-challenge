@@ -26,6 +26,7 @@ export default interface IConfig {
         mailhog: {
             host: string;
             port: string;
+            from: string;
         };
         database: {
             type: MongoConnectionOptions['type'];

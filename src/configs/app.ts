@@ -29,6 +29,7 @@ export default {
     mailhog: {
         host: getEnv('MAILHOG_HOST', '', true),
         port: getEnv('MAILHOG_SMTP_PORT', '', true),
+        from: getEnv('MAILHOG_FROM', '', true),
     },
     database: {
         type: getEnv('DB', 'mongodb'),
