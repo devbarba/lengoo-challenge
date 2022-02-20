@@ -1,5 +1,7 @@
+import { ObjectId } from 'mongodb';
+
 interface IUser {
-    _id?: string;
+    _id?: ObjectId | string;
     name: string;
     email: string;
     role: string;
