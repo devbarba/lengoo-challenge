@@ -18,6 +18,14 @@ export default {
         port: getEnv('REDIS_PORT', '', true),
         pass: getEnv('REDIS_PASS', '', true),
     },
+    minio: {
+        user: getEnv('MINIO_ROOT_USER', '', true),
+        pass: getEnv('MINIO_ROOT_PASSWORD', '', true),
+        api: {
+            host: getEnv('MINIO_HOST', '', true),
+            port: getEnv('MINIO_API_PORT', '', true),
+        },
+    },
     database: {
         type: getEnv('DB', 'mongodb'),
         host: getEnv('MONGO_HOST', '', true),
