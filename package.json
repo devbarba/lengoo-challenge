@@ -12,6 +12,7 @@
     "production": "node ./dist/server.js",
     "clean": "rm -rf ./dist && mkdir dist",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
+    "importData": "ts-node ./src/utils/import.ts",
     "dev": "PROJECT_DIR=src ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules --no-notify src/server.ts",
     "test": "jest"
   },

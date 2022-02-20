@@ -13,6 +13,7 @@
       "strictNullChecks": true,
       "moduleResolution": "node",
       "typeRoots": [
+        "src/@types",
         "node_modules/@types",
       ],
       "esModuleInterop": true,
