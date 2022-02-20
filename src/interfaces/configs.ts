@@ -15,6 +15,18 @@ export default interface IConfig {
             port: string;
             pass: string;
         };
+        minio: {
+            user: string;
+            pass: string;
+            api: {
+                host: string;
+                port: string;
+            };
+        };
+        mailhog: {
+            host: string;
+            port: string;
+        };
         database: {
             type: MongoConnectionOptions['type'];
             host: MongoConnectionOptions['host'];

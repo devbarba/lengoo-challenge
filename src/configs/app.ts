@@ -26,6 +26,10 @@ export default {
             port: getEnv('MINIO_API_PORT', '', true),
         },
     },
+    mailhog: {
+        host: getEnv('MAILHOG_HOST', '', true),
+        port: getEnv('MAILHOG_SMTP_PORT', '', true),
+    },
     database: {
         type: getEnv('DB', 'mongodb'),
         host: getEnv('MONGO_HOST', '', true),
