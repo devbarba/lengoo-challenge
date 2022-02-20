@@ -21,6 +21,13 @@ services:
         command: redis-server --requirepass ${REDIS_PASS}
         ports:
             - '${REDIS_PORT}:${REDIS_PORT}'
+    lengoo-mailhog:
+        image: mailhog/mailhog
+        logging:
+            driver: 'none'
+        ports:
+            - ${MAILHOG_SMTP_PORT}:${MAILHOG_SMTP_PORT}
+            - ${MAILHOG_WEBUI_PORT}:${MAILHOG_WEBUI_PORT}
     lengoo-app:
         build: .
         ports:
@@ -34,9 +41,11 @@ services:
         links:
             - lengoo-mongodb
             - lengoo-redis
+            - lengoo-mailhog
         depends_on:
             - lengoo-mongodb
             - lengoo-redis
+            - lengoo-mailhog
         healthcheck:
             test: ["CMD", "curl", "-f", 'http://${APP_HOST}:${APP_PORT}/api']
             interval: 20s
