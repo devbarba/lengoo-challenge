@@ -11,9 +11,12 @@ import IConfig from './interfaces/configs';
 import routes from './routes/index';
 import { autoloadConfig, getBaseDir } from './utils/helper';
 
+const Minio = require('minio');
+
 class App {
     public server: Application;
     public configObject: IConfig;
+    public minio;
 
     constructor() {
         this.loadConfigurations();
@@ -23,6 +26,7 @@ class App {
         this.routes();
         this.crons();
         this.mongoDatabase();
+        this.minioBucket();
         this.errorHandling();
     }
 
@@ -79,6 +83,17 @@ class App {
             return res.status(500).json({
                 msg: error.message,
             });
+        });
+    }
+
+    private minioBucket() {
+        const minioConfigs = this.configObject.app.minio;
+
+        this.minio = new Minio.Client({
+            endPoint: minioConfigs.host,
+            useSSL: false,
+            accessKey: minioConfigs.user,
+            secretKey: minioConfigs.pass,
         });
     }
 }
