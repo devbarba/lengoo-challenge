@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { UNAUTHORIZED } from 'http-status';
 import { JwtPayload, verify } from 'jsonwebtoken';
-import Handler from 'src/errors/handler.error';
 
 import app from '../app';
+import Handler from '../errors/handler.error';
 
 export default function ensureAuthenticated(
     req: Request,

@@ -1,37 +1,67 @@
 version: '3.1'
 
 services:
-  lengoo-mongodb:
-    image: mongo:latest
-    container_name: lengoo-mongodb
-    restart: always
-    ports:
-        - '${MONGO_PORT}:${MONGO_PORT}'
-    volumes:
-        - ./docker/initMongo.js:/docker-entrypoint-initdb.d/initMongo.js:ro
-        - ./docker/mongo-volume:/data/db
-    environment:
-        - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
-        - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
-        - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS}
-  lengoo-redis:
-    image: redis:latest
-    container_name: lengoo-redis
-    restart: always
-    command: redis-server --requirepass ${REDIS_PASS}
-    ports:
-        - '${REDIS_PORT}:${REDIS_PORT}'
-  lengoo-app:
-    build: .
-    ports:
-        - '${APP_PORT}:${APP_PORT}'
-    volumes:
-        - .:/usr/lengoo/app
-        - /usr/lengoo/app/node_modules
-    command: sh -c 'npm run build && npm run production'
-    links:
-        - lengoo-mongodb
-        - lengoo-redis
-    depends_on:
-        - lengoo-mongodb
-        - lengoo-redis
+    lengoo-mongodb:
+        image: mongo:latest
+        container_name: lengoo-mongodb
+        restart: always
+        ports:
+            - '${MONGO_PORT}:${MONGO_PORT}'
+        volumes:
+            - ./docker/initMongo.js:/docker-entrypoint-initdb.d/initMongo.js:ro
+            - ./docker/mongo-volume:/data/db
+        environment:
+            - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
+            - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+            - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS}
+    lengoo-redis:
+        image: redis:latest
+        container_name: lengoo-redis
+        restart: always
+        command: redis-server --requirepass ${REDIS_PASS}
+        ports:
+            - '${REDIS_PORT}:${REDIS_PORT}'
+    lengoo-mailhog:
+        image: mailhog/mailhog
+        logging:
+            driver: 'none'
+        ports:
+            - '${MAILHOG_SMTP_PORT}:${MAILHOG_SMTP_PORT}'
+            - '${MAILHOG_WEBUI_PORT}:${MAILHOG_WEBUI_PORT}'
+    lengoo-minio:
+        image: minio/minio
+        ports:
+            - '${MINIO_API_PORT}:${MINIO_API_PORT}'
+            - '${MINIO_CONSOLE_PORT}:${MINIO_CONSOLE_PORT}'
+        volumes:
+            - ./docker/minio-volume:/data
+        environment:
+            MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+            MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+        command: server /data --console-address ':${MINIO_CONSOLE_PORT}'
+    lengoo-app:
+        build: .
+        ports:
+            - '${APP_PORT}:${APP_PORT}'
+        volumes:
+            - ./docker/scripts:/usr/lengoo/scripts
+            - .:/usr/lengoo/app
+            - /usr/lengoo/app/node_modules
+        working_dir: /usr/lengoo/app
+        command: sh -c "chmod +x /usr/lengoo/scripts/init.sh && /usr/lengoo/scripts/init.sh"
+        links:
+            - lengoo-mongodb
+            - lengoo-redis
+            - lengoo-mailhog
+            - lengoo-minio
+        depends_on:
+            - lengoo-mongodb
+            - lengoo-redis
+            - lengoo-mailhog
+            - lengoo-minio
+        healthcheck:
+            test: ["CMD", "curl", "-f", 'http://${APP_HOST}:${APP_PORT}/api']
+            interval: 20s
+            timeout: 5s
+            retries: 5
+            start_period: 1m30s
