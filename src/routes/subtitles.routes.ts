@@ -3,6 +3,7 @@ import ensureAuthenticated from '@middlewares/authenticated.middleware';
 import { verifyFields } from '@utils/helper';
 import { Router, Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
+import Multer from 'multer';
 
 const subtitlesController = new SubtitleController();
 
@@ -12,28 +13,31 @@ subtitlesRoutes.use(ensureAuthenticated);
 
 subtitlesRoutes.post(
     '/upload',
+    Multer({ storage: Multer.memoryStorage() }).array('files'),
     (req: Request, res: Response, next: NextFunction) => {
         verifyFields(
-            { ...req.body, ...req.files },
+            { ...req.body, files: req.files },
             Joi.object({
                 sourceLanguage: Joi.string().min(2).max(2).required(),
                 targetLanguage: Joi.string().min(2).max(2).required(),
-                file: {
-                    name: Joi.string()
-                        .pattern(/\.(txt)$/)
-                        .required(),
-                    data: Joi.any().required(),
-                    size: Joi.number().required(),
-                    encoding: Joi.string().required(),
-                    tempFilePath: Joi.string().allow(null, ''),
-                    truncated: Joi.boolean().required(),
-                    mimetype: Joi.string().valid('text/plain').required(),
-                    md5: Joi.string().required(),
-                    mv: Joi.function(),
-                },
+                files: Joi.array()
+                    .items(
+                        Joi.object({
+                            fieldname: Joi.string().required(),
+                            originalname: Joi.string()
+                                .pattern(/\.(txt)$/)
+                                .required(),
+                            encoding: Joi.string().required(),
+                            mimetype: Joi.string()
+                                .valid('text/plain')
+                                .required(),
+                            buffer: Joi.any().required(),
+                            size: Joi.number().required(),
+                        }).required()
+                    )
+                    .required(),
             }).required()
         );
-
         subtitlesController.create({ req, res, next });
     }
 );
