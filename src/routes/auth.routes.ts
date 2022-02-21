@@ -1,8 +1,7 @@
+import AuthController from '@controllers/auth.controller';
+import { verifyFields } from '@utils/helper';
 import { Router, Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
-
-import AuthController from '../controllers/auth.controller';
-import { verifyFields } from '../utils/helper';
 
 const authController = new AuthController();
 
