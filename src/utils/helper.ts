@@ -91,7 +91,7 @@ const getCodes = (code: string): number => {
  */
 const verifyFields = (
     body: unknown,
-    schema: Joi.ObjectSchema<unknown>
+    schema: Joi.ObjectSchema<unknown> | Joi.ArraySchema
 ): Handler | void => {
     const schemaValidated = schema.validate(body);
 
