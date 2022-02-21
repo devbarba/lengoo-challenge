@@ -21,7 +21,19 @@
       "emitDecoratorMetadata": true,
       "skipLibCheck": true,
       "forceConsistentCasingInFileNames": true,
-      "baseUrl": "."
+      "baseUrl": "src",
+      "paths": {
+          "@config/*": ["config/*"],
+          "@controllers/*": ["controllers/*"],
+          "@database/*": ["database/*"],
+          "@errors/*": ["errors/*"],
+          "@interfaces/*": ["interfaces/*"],
+          "@middlewares/*": ["middlewares/*"],
+          "@models/*": ["models/*"],
+          "@routes/*": ["routes/*"],
+          "@services/*": ["services/*"],
+          "@utils/*": ["utils/*"]
+      }
     },
     "include": ["src/**/*"],
     "exclude": [
