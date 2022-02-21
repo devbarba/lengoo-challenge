@@ -30,7 +30,6 @@ export default {
         from: getEnv('MAILHOG_FROM', '', true),
     },
     database: {
-        type: getEnv('DB', 'mongodb'),
         host: getEnv('MONGO_HOST', '', true),
         port: getEnv('MONGO_PORT', '', true),
         name: getEnv('MONGO_DB_NAME', '', true),

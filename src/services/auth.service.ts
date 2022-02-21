@@ -1,7 +1,6 @@
 import { compare } from 'bcryptjs';
 import { UNPROCESSABLE_ENTITY } from 'http-status';
 import { sign } from 'jsonwebtoken';
-import { getRepository } from 'typeorm';
 
 import app from '../app';
 import Handler from '../errors/handler.error';
@@ -17,9 +16,7 @@ class AuthService implements IAuthService {
         email,
         password,
     }: IAuthRequest): Promise<IAuthResponse> {
-        const user: User | undefined = await getRepository(User).findOne({
-            where: email,
-        });
+        const user = await User.findOne({ email });
 
         if (!user)
             throw new Handler(
@@ -36,7 +33,7 @@ class AuthService implements IAuthService {
             );
 
         const token = sign({}, app.configObject.app.jwt.secret, {
-            subject: user._id.toString(),
+            subject: user._id.toString() || '',
             expiresIn: app.configObject.app.jwt.ttl,
         });
 

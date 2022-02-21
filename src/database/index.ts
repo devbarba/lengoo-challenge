@@ -1,23 +1,16 @@
-import { createConnection, Connection, ConnectionOptions } from 'typeorm';
+import mongoose from 'mongoose';
 
 import IConfig from '../interfaces/configs';
-import User from '../models/User';
 
-export default async (
-    database: IConfig['app']['database']
-): Promise<Connection> => {
-    const options: ConnectionOptions = {
-        name: 'default',
-        logging: true,
-        synchronize: true,
-        type: database.type,
-        host: database.host,
-        port: database.port,
-        username: database.user,
-        password: database.pass,
-        database: database.name,
-        entities: [User],
-    };
-
-    return createConnection(options);
+export default (database: IConfig['app']['database']): void => {
+    mongoose
+        .connect(
+            `mongodb://${database.user}:${database.pass}@${database.host}/${database.name}`,
+            {
+                useCreateIndex: true,
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            }
+        )
+        .catch(() => process.exit(1));
 };

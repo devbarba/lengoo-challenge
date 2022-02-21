@@ -1,5 +1,4 @@
 import { ClientOptions } from 'minio';
-import { MongoConnectionOptions } from 'typeorm/driver/mongodb/MongoConnectionOptions';
 
 export default interface IConfig {
     app: {
@@ -28,12 +27,11 @@ export default interface IConfig {
             from: string;
         };
         database: {
-            type: MongoConnectionOptions['type'];
-            host: MongoConnectionOptions['host'];
-            port: MongoConnectionOptions['port'];
-            name: MongoConnectionOptions['database'];
-            user: MongoConnectionOptions['username'];
-            pass: MongoConnectionOptions['password'];
+            host: string;
+            port: string;
+            name: string;
+            user: string;
+            pass: string;
         };
     };
 }
