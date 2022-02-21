@@ -1,5 +1,5 @@
-import { ITranslation } from '../interfaces/translation';
-import Translation from '../models/Translation';
+import { ITranslation } from '@interfaces/translation';
+import Translation from '@models/Translation';
 
 interface ITranslationService {
     insert(translations: ITranslation[]): Promise<ITranslation[]>;

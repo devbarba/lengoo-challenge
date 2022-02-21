@@ -1,9 +1,8 @@
+import Handler from '@errors/handler.error';
+import { IUser } from '@interfaces/user';
+import User from '@models/User';
 import { hash } from 'bcryptjs';
 import { NOT_FOUND, CONFLICT } from 'http-status';
-
-import Handler from '../errors/handler.error';
-import { IUser } from '../interfaces/user';
-import User from '../models/User';
 
 interface IUserService {
     list(): Promise<IUser[]>;
