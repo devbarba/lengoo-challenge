@@ -1,7 +1,6 @@
+import { ITranslation } from '@interfaces/translation';
 import { Document, ObjectId } from 'mongodb';
 import { Model, model, Schema } from 'mongoose';
-
-import { ITranslation } from '../interfaces/translation';
 
 interface ITranslationModel extends ITranslation, Document {}
 

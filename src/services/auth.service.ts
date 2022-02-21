@@ -1,11 +1,10 @@
+import Handler from '@errors/handler.error';
+import { IAuthRequest, IAuthResponse } from '@interfaces/auth';
+import User from '@models/User';
+import app from 'app';
 import { compare } from 'bcryptjs';
 import { UNPROCESSABLE_ENTITY } from 'http-status';
 import { sign } from 'jsonwebtoken';
-
-import app from '../app';
-import Handler from '../errors/handler.error';
-import { IAuthRequest, IAuthResponse } from '../interfaces/auth';
-import User from '../models/User';
 
 interface IAuthService {
     login({ email, password }: IAuthRequest): Promise<IAuthResponse>;

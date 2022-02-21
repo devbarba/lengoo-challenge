@@ -1,9 +1,8 @@
+import UserController from '@controllers/users.controller';
+import ensureAuthenticated from '@middlewares/authenticated.middleware';
+import { verifyFields } from '@utils/helper';
 import { Router, Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
-
-import UserController from '../controllers/users.controller';
-import ensureAuthenticated from '../middlewares/authenticated.middleware';
-import { verifyFields } from '../utils/helper';
 
 const userController = new UserController();
 

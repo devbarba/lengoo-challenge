@@ -1,8 +1,7 @@
+import { IRoute, IResponse } from '@interfaces/route';
+import { ITranslation } from '@interfaces/translation';
+import TranslationService from '@services/translation.service';
 import { OK } from 'http-status';
-
-import { IRoute, IResponse } from '../interfaces/route';
-import { ITranslation } from '../interfaces/translation';
-import TranslationService from '../services/translation.service';
 
 interface ITranslationController {
     insert({ req, res, next }: IRoute): Promise<IResponse<ITranslation[]>>;

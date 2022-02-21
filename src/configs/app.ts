@@ -1,6 +1,5 @@
+import { getEnv } from '@utils/helper';
 import * as dotenv from 'dotenv-safe';
-
-import { getEnv } from '../utils/helper';
 
 dotenv.config();
 

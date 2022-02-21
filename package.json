@@ -11,8 +11,8 @@
     "start": "PROJECT_DIR=dist babel-node -- ./dist/server.js",
     "production": "node ./dist/server.js",
     "clean": "rm -rf ./dist && mkdir dist",
-    "importData": "ts-node ./src/utils/import.ts",
-    "dev": "PROJECT_DIR=src ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules --no-notify src/server.ts",
+    "importData": "ts-node -r tsconfig-paths/register src/utils/import.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules --no-notify src/server.ts",
     "test": "jest"
   },
   "babel": {

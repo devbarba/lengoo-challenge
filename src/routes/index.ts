@@ -1,9 +1,8 @@
+import authRouter from '@routes/auth.routes';
+import translationsRouter from '@routes/translations.routes';
+import usersRouter from '@routes/users.routes';
 import { Router, Response, Request } from 'express';
 import { OK } from 'http-status';
-
-import authRouter from './auth.routes';
-import translationsRouter from './translations.routes';
-import usersRouter from './users.routes';
 
 const routes = Router();
 

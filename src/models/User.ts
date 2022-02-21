@@ -1,7 +1,6 @@
+import { IUser } from '@interfaces/user';
 import { Document } from 'mongodb';
 import { Model, model, Schema } from 'mongoose';
-
-import { IUser } from '../interfaces/user';
 
 interface IUserModel extends IUser, Document {}
 

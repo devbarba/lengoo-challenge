@@ -1,8 +1,7 @@
+import { IRoute, IResponse } from '@interfaces/route';
+import { IUser } from '@interfaces/user';
+import UserService from '@services/user.service';
 import { CREATED, NO_CONTENT, OK } from 'http-status';
-
-import { IRoute, IResponse } from '../interfaces/route';
-import { IUser } from '../interfaces/user';
-import UserService from '../services/user.service';
 
 interface IUserController {
     list({ req, res, next }: IRoute): Promise<IResponse<IUser[]>>;

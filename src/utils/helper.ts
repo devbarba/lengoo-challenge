@@ -1,10 +1,9 @@
+import Handler from '@errors/handler.error';
+import IConfig from '@interfaces/configs';
 import fs from 'fs';
 import { BAD_REQUEST, PRECONDITION_FAILED } from 'http-status';
 import Joi from 'joi';
 import path from 'path';
-
-import Handler from '../errors/handler.error';
-import IConfig from '../interfaces/configs';
 
 /**
  * autoloadConfig: Auto load configurations.

@@ -1,10 +1,9 @@
+import createConnection from '@database';
+import { IUser } from '@interfaces/user';
+import User from '@models/User';
+import app from 'app';
 import { hash } from 'bcryptjs';
 import { ObjectId } from 'mongodb';
-
-import app from '../app';
-import createConnection from '../database';
-import { IUser } from '../interfaces/user';
-import User from '../models/User';
 
 const user: IUser = {
     _id: new ObjectId('LengooLengoo'),
