@@ -25,7 +25,7 @@
       "paths": {
           "@config/*": ["config/*"],
           "@controllers/*": ["controllers/*"],
-          "@database/*": ["database/*"],
+          "@database": ["database/index"],
           "@errors/*": ["errors/*"],
           "@interfaces/*": ["interfaces/*"],
           "@middlewares/*": ["middlewares/*"],
