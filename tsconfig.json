@@ -23,11 +23,13 @@
       "forceConsistentCasingInFileNames": true,
       "baseUrl": "src",
       "paths": {
+          "@app": ["app"],
           "@config/*": ["config/*"],
           "@controllers/*": ["controllers/*"],
           "@database": ["database/index"],
           "@errors/*": ["errors/*"],
           "@interfaces/*": ["interfaces/*"],
+          "@jobs/*": ["jobs/*"],
           "@middlewares/*": ["middlewares/*"],
           "@models/*": ["models/*"],
           "@queue": ["queue/index"],
