@@ -1,8 +1,7 @@
+import { IAuthResponse } from '@interfaces/auth';
+import { IRoute, IResponse } from '@interfaces/route';
+import AuthService from '@services/auth.service';
 import { OK } from 'http-status';
-
-import { IAuthResponse } from '../interfaces/auth';
-import { IRoute, IResponse } from '../interfaces/route';
-import AuthService from '../services/auth.service';
 
 interface IAuthController {
     login({ req, res, next }: IRoute): Promise<IResponse<IAuthResponse>>;
