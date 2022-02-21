@@ -16,9 +16,7 @@ class AuthService implements IAuthService {
         email,
         password,
     }: IAuthRequest): Promise<IAuthResponse> {
-        const user = await User.findOne({
-            where: email,
-        });
+        const user = await User.findOne({ email });
 
         if (!user)
             throw new Handler(
@@ -35,8 +33,7 @@ class AuthService implements IAuthService {
             );
 
         const token = sign({}, app.configObject.app.jwt.secret, {
-            // @ts-ignore
-            subject: user._id.toString(),
+            subject: user._id.toString() || '',
             expiresIn: app.configObject.app.jwt.ttl,
         });
 

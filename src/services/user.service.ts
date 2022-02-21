@@ -13,7 +13,7 @@ interface IUserService {
 
 class UserService implements IUserService {
     public async list(): Promise<IUser[]> {
-        const users: IUser[] = await User.find();
+        const users: IUser[] = await User.find().select(['-password', '-__v']);
 
         if (users.length === 0)
             throw new Handler('no query results found', NOT_FOUND);
@@ -28,7 +28,7 @@ class UserService implements IUserService {
         active,
         password,
     }: IUser): Promise<IUser> {
-        const user = await User.findOne({ where: email });
+        const user = await User.findOne({ email });
 
         if (user) throw new Handler('email address already used', CONFLICT);
 
@@ -46,11 +46,11 @@ class UserService implements IUserService {
     }
 
     public async destroy(id: string): Promise<void> {
-        const user = await User.findOne({ where: id });
+        const user = await User.findOne({ _id: id });
 
         if (!user) throw new Handler('user not found', NOT_FOUND);
 
-        await User.remove({ where: id });
+        await User.remove({ _id: id });
     }
 }
 

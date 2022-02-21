@@ -23,7 +23,7 @@ class ImportUser {
 
     public async importUser(): Promise<void> {
         try {
-            const userToAdd = await User.findOne(user._id);
+            const userToAdd = await User.findOne({ _id: user._id });
 
             if (!userToAdd)
                 await User.create({
