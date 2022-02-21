@@ -1,15 +1,14 @@
+import createConnection from '@database';
+import Handler from '@errors/handler.error';
+import IConfig from '@interfaces/configs';
+import routes from '@routes/index';
+import { autoloadConfig, getBaseDir } from '@utils/helper';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import express, { Application } from 'express';
 import kue from 'kue';
 import kueUi from 'kue-ui';
 import cronJob from 'node-cron';
-
-import createConnection from './database';
-import Handler from './errors/handler.error';
-import IConfig from './interfaces/configs';
-import routes from './routes/index';
-import { autoloadConfig, getBaseDir } from './utils/helper';
 
 const Minio = require('minio');
 
