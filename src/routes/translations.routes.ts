@@ -27,7 +27,7 @@ translationsRouter.post(
                 .required()
         );
 
-        translationController.insert({ req, res, next });
+        translationController.create({ req, res, next });
     }
 );
 

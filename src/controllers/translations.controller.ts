@@ -4,7 +4,7 @@ import TranslationService from '@services/translation.service';
 import { OK } from 'http-status';
 
 interface ITranslationController {
-    insert({ req, res, next }: IRoute): Promise<IResponse<ITranslation[]>>;
+    create({ req, res, next }: IRoute): Promise<IResponse<ITranslation[]>>;
 }
 
 class TranslationController implements ITranslationController {
@@ -14,7 +14,7 @@ class TranslationController implements ITranslationController {
         this.translationService = new TranslationService();
     }
 
-    public async insert({
+    public async create({
         req,
         res,
         next,
@@ -22,7 +22,7 @@ class TranslationController implements ITranslationController {
         try {
             const translations = req.body;
 
-            const insertedTranslations = await this.translationService.insert(
+            const insertedTranslations = await this.translationService.create(
                 translations.map((trn) => {
                     return {
                         _user: req.user.id,
