@@ -4,11 +4,11 @@ import { IAuthResponse } from '../interfaces/auth';
 import { IRoute, IResponse } from '../interfaces/route';
 import AuthService from '../services/auth.service';
 
-interface IRecordController {
+interface IAuthController {
     login({ req, res, next }: IRoute): Promise<IResponse<IAuthResponse>>;
 }
 
-class AuthController implements IRecordController {
+class AuthController implements IAuthController {
     private authService: AuthService;
 
     constructor() {

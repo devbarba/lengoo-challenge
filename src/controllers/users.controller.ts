@@ -4,13 +4,13 @@ import { IRoute, IResponse } from '../interfaces/route';
 import { IUser } from '../interfaces/user';
 import UserService from '../services/user.service';
 
-interface IRecordController {
+interface IUserController {
     list({ req, res, next }: IRoute): Promise<IResponse<IUser[]>>;
     create({ req, res, next }: IRoute): Promise<IResponse<IUser>>;
     destroy({ req, res, next }: IRoute): Promise<IResponse<void>>;
 }
 
-class UserController implements IRecordController {
+class UserController implements IUserController {
     private userService: UserService;
 
     constructor() {
