@@ -1,7 +1,7 @@
 import { Document, ObjectId } from 'mongodb';
 import { Model, model, Schema } from 'mongoose';
 
-import { ITranslation, AcceptedLanguages } from '../interfaces/translation';
+import { ITranslation } from '../interfaces/translation';
 
 interface ITranslationModel extends ITranslation, Document {}
 
@@ -21,12 +21,14 @@ const Translation = new Schema({
     },
     sourceLanguage: {
         type: String,
-        enum: AcceptedLanguages,
+        min: 2,
+        max: 2,
         required: true,
     },
     targetLanguage: {
         type: String,
-        enum: AcceptedLanguages,
+        min: 2,
+        max: 2,
         required: true,
     },
 });

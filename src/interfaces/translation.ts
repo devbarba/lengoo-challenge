@@ -1,17 +1,12 @@
 import { ObjectId } from 'mongodb';
 
-enum AcceptedLanguages {
-    DE = 'de',
-    EN = 'en',
-}
-
 interface ITranslation {
     _id?: ObjectId;
     _user: ObjectId;
     source: string;
     target: string;
-    sourceLanguage: AcceptedLanguages;
-    targetLanguage: AcceptedLanguages;
+    sourceLanguage: string;
+    targetLanguage: string;
 }
 
-export { ITranslation, AcceptedLanguages };
+export { ITranslation };
