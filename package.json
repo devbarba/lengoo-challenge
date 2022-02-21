@@ -35,7 +35,7 @@
     "mailhog": "^4.16.0",
     "minio": "^7.0.26",
     "mongodb": "^4.4.0",
-    "mongoose": "^6.2.2",
+    "mongoose": "^5.13.7",
     "node-cron": "^3.0.0"
   },
   "devDependencies": {
