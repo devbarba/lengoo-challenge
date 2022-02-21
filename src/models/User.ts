@@ -1,43 +1,39 @@
-import {
-    Entity,
-    Column,
-    CreateDateColumn,
-    UpdateDateColumn,
-    ObjectIdColumn,
-    ObjectID,
-} from 'typeorm';
+import { Model, model, Schema } from 'mongoose';
 
-@Entity('users')
-class User {
-    @ObjectIdColumn()
-    _id: ObjectID;
+import { IUser } from '../interfaces/user';
 
-    @Column()
-    name: string;
+const User = new Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        unique: true,
+        required: true,
+    },
+    role: {
+        type: String,
+        required: true,
+    },
+    active: {
+        type: Boolean,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now,
+    },
+});
 
-    @Column({ unique: true })
-    email: string;
+const UserModel: Model<IUser> = model<IUser, Model<IUser>>('User', User);
 
-    @Column()
-    role: 'Client' | 'Admin' | string;
-
-    @Column()
-    active: boolean;
-
-    @Column()
-    password: string;
-
-    @CreateDateColumn()
-    created_at: Date;
-
-    @UpdateDateColumn()
-    updated_at: Date;
-
-    toJSON() {
-        // @ts-ignore
-        delete this.password;
-        return this;
-    }
-}
-
-export default User;
+export default UserModel;
