@@ -7,7 +7,6 @@ import { autoloadConfig, getBaseDir } from '@utils/helper';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import express, { Application } from 'express';
-import fileUpload from 'express-fileupload';
 
 const Minio = require('minio');
 
@@ -34,8 +33,7 @@ class App {
 
     private middlewares() {
         this.server.use(cors());
-        this.server.use(fileUpload());
-        this.server.use(bodyParser.json());
+        this.server.use(bodyParser.json({ limit: '4mb' }));
         this.server.use(
             bodyParser.urlencoded({
                 extended: true,
