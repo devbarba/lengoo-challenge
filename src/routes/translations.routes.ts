@@ -1,9 +1,15 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
 
+import TranslationController from '../controllers/translations.controller';
+import ensureAuthenticated from '../middlewares/authenticated.middleware';
 import { verifyFields } from '../utils/helper';
 
+const translationController = new TranslationController();
+
 const translationsRouter = Router();
+
+translationsRouter.use(ensureAuthenticated);
 
 translationsRouter.post(
     '/insert',
@@ -21,6 +27,8 @@ translationsRouter.post(
                 )
                 .required()
         );
+
+        translationController.insert({ req, res, next });
     }
 );
 
