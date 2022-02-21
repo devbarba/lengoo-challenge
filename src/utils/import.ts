@@ -1,7 +1,7 @@
 import createConnection from '@database';
 import { IUser } from '@interfaces/user';
 import User from '@models/User';
-import app from 'app';
+import app from '@app';
 import { hash } from 'bcryptjs';
 import { ObjectId } from 'mongodb';
 
