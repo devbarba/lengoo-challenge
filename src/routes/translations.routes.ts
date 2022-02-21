@@ -11,7 +11,7 @@ const translationsRouter = Router();
 translationsRouter.use(ensureAuthenticated);
 
 translationsRouter.post(
-    '/insert',
+    '/',
     (req: Request, res: Response, next: NextFunction) => {
         verifyFields(
             req.body,
