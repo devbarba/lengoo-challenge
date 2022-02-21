@@ -9,16 +9,24 @@ enum SubtitleStatus {
 
 interface ISubtitleFile {
     name: string;
+    originalname?: string;
+    buffer?: unknown;
     url: string;
 }
 
 interface ISubtitle {
     _id?: ObjectId;
-    _user: ObjectId;
+    _user?: ObjectId;
     sourceLanguage: string;
     targetLanguage: string;
-    file: ISubtitleFile;
-    status: SubtitleStatus;
+    files: ISubtitleFile;
+    status?: SubtitleStatus;
 }
 
-export { ISubtitle, ISubtitleFile, SubtitleStatus };
+interface ISubtitleUploadJob {
+    sourceLanguage: string;
+    targetLanguage: string;
+    file: unknown;
+    _user: ObjectId | string;
+}
+export { ISubtitle, ISubtitleFile, SubtitleStatus, ISubtitleUploadJob };
