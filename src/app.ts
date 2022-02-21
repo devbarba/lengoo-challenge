@@ -6,6 +6,7 @@ import { autoloadConfig, getBaseDir } from '@utils/helper';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import express, { Application } from 'express';
+import fileUpload from 'express-fileupload';
 import kue from 'kue';
 import kueUi from 'kue-ui';
 import cronJob from 'node-cron';
@@ -35,6 +36,7 @@ class App {
 
     private middlewares() {
         this.server.use(cors());
+        this.server.use(fileUpload());
         this.server.use(bodyParser.json());
         this.server.use('/queues', kueUi.app);
         this.server.use('/queues/api', kue.app);
