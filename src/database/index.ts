@@ -1,6 +1,5 @@
+import IConfig from '@interfaces/configs';
 import mongoose from 'mongoose';
-
-import IConfig from '../interfaces/configs';
 
 export default (database: IConfig['app']['database']): void => {
     mongoose
