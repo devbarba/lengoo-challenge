@@ -1,4 +1,5 @@
 import SubtitleUploadJob from '@jobs/subtitles.job';
+import TranslationProcessJob from '@jobs/translations.job';
 import { getEnv } from '@utils/helper';
 import dotenv from 'dotenv-safe';
 import { Application } from 'express';
@@ -16,9 +17,16 @@ const Queue = kue.createQueue({
     },
 });
 
-const translationQueue = () => {
+const subtitleQueue = () => {
     Queue.process('subtitles_upload', 1, (job: Job, done: DoneCallback) => {
         SubtitleUploadJob(job.data);
+        done();
+    });
+};
+
+const translationQueue = () => {
+    Queue.process('translation_process', 1, (job: Job, done: DoneCallback) => {
+        TranslationProcessJob(job.data);
         done();
     });
 };
@@ -33,7 +41,8 @@ const loadQueueUi = (server: Application) => {
 };
 
 const loadCron = () => {
-    cronJob.schedule('*/10 * * * * *', () => {
+    cronJob.schedule('* * * * * *', () => {
+        subtitleQueue();
         translationQueue();
     });
 };
