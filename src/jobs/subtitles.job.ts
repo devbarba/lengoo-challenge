@@ -1,7 +1,6 @@
 import app from '@app';
 import { ISubtitle, SubtitleStatus } from '@interfaces/subtitle';
 import Subtitle from '@models/Subtitle';
-import { Queue } from '@queue';
 import { Client as MinioClient } from 'minio';
 
 class SubtitleUploadJob {
@@ -28,10 +27,11 @@ class SubtitleUploadJob {
                 file: fileName,
             });
 
-            Queue.create('translation_process', {
-                id: String(subtitle._id),
-                fileName,
-            })
+            app.queue.queue
+                .create('translation_process', {
+                    id: String(subtitle._id),
+                    fileName,
+                })
                 .removeOnComplete(true)
                 .attempts(3)
                 .delay(1000)

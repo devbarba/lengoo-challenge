@@ -10,7 +10,7 @@ interface ISubtitleService {
 class SubtitleService implements ISubtitleService {
     public async translate(
         languages: { source: string; target: string },
-        subtitles: string[]
+        subtitles: string[] | any[]
     ): Promise<{ id: string; range: string; translation: string }[]> {
         const allTranslations = Promise.all(
             subtitles.map(async (subtitle) => {

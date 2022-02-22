@@ -1,9 +1,9 @@
+import app from '@app';
 import Handler from '@errors/handler.error';
 import { IAuthRequest, IAuthResponse } from '@interfaces/auth';
 import User from '@models/User';
-import app from '@app';
 import { compare } from 'bcryptjs';
-import { UNPROCESSABLE_ENTITY } from 'http-status';
+import { UNAUTHORIZED } from 'http-status';
 import { sign } from 'jsonwebtoken';
 
 interface IAuthService {
@@ -20,7 +20,7 @@ class AuthService implements IAuthService {
         if (!user)
             throw new Handler(
                 'incorrect email/password combination',
-                UNPROCESSABLE_ENTITY
+                UNAUTHORIZED
             );
 
         const passwordMatched = await compare(password, user.password);
@@ -28,7 +28,7 @@ class AuthService implements IAuthService {
         if (!passwordMatched)
             throw new Handler(
                 'incorrect email/password combination',
-                UNPROCESSABLE_ENTITY
+                UNAUTHORIZED
             );
 
         const token = sign({}, app.configObject.app.jwt.secret, {
