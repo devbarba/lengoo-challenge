@@ -12,7 +12,7 @@ describe('[GET] - /api', () => {
         dotenv.config();
     });
 
-    beforeAll(async () => {
+    afterAll(async () => {
         await mongoose.disconnect();
     });
 
