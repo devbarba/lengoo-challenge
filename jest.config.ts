@@ -9,6 +9,8 @@ export default {
         'src/interfaces',
         'src/server.ts',
         'src/__tests__/__mocks__',
+        'src/@types',
+        'src/utils/import.ts',
     ],
     coverageDirectory: 'coverage',
     coverageProvider: 'v8',

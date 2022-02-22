@@ -6,7 +6,7 @@ import request from 'supertest';
 
 import { validationResponses } from '../__mocks__/payloads.mock';
 
-describe('[GET] - /api', () => {
+describe('[POST] - /api/auth', () => {
     const endpointToCall = '/api/auth';
     const email = 'challenge@lengoo.com';
 
