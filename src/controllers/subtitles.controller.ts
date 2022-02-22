@@ -22,6 +22,7 @@ class SubtitleController implements ISubtitleController {
                         _user: req.user.id,
                     })
                         .removeOnComplete(true)
+                        .attempts(3)
                         .save();
                 });
             }

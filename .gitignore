@@ -1,10 +1,14 @@
+#mongodb
 /docker/mongo-volume/*
-/docker/minio-volume/*
-/docker/minio-volume/lengoo/*
 !/docker/mongo-volume/.gitkeep
+
+#minio
+/docker/minio-volume/*
 !/docker/minio-volume/.gitkeep
-!/docker/minio-volume/lengoo
+/docker/minio-volume/lengoo/*
 !/docker/minio-volume/lengoo/.gitkeep
+
+#others
 node_modules
 dist
 .vscode
