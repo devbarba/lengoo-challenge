@@ -8,7 +8,7 @@ export default {
         'dist',
         'src/interfaces',
         'src/server.ts',
-        'src/__tests__/mocks',
+        'src/__tests__/__mocks__',
     ],
     coverageDirectory: 'coverage',
     coverageProvider: 'v8',

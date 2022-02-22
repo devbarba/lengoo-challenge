@@ -38,7 +38,8 @@ class App {
             })
         );
         this.server.use('/queues/', kueUi.app);
-        this.server.use('/queues/api', kue.app);
+        if (process.env.NODE_ENV !== 'test')
+            this.server.use('/queues/api', kue.app);
         kueUi.setup({
             apiURL: '/queues/api',
             baseURL: '/queues',
