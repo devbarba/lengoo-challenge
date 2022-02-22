@@ -1,52 +1,58 @@
+import app from '@app';
 import SubtitleUploadJob from '@jobs/subtitles.job';
 import TranslationProcessJob from '@jobs/translations.job';
 import { getEnv } from '@utils/helper';
 import dotenv from 'dotenv-safe';
-import { Application } from 'express';
 import kue, { Job, DoneCallback } from 'kue';
-import kueUi from 'kue-ui';
 import cronJob from 'node-cron';
 
 dotenv.config();
 
-const Queue = kue.createQueue({
-    redis: {
-        host: getEnv('REDIS_HOST', '', true),
-        port: getEnv('REDIS_PORT', '', true),
-        auth: getEnv('REDIS_PASS', '', true),
-    },
-});
+class Queue {
+    public queue: kue.Queue;
 
-Queue.setMaxListeners(Queue.getMaxListeners() + 1);
+    constructor() {
+        if (process.env.NODE_ENV !== 'test') {
+            this.queue = kue.createQueue({
+                redis: {
+                    host: getEnv('REDIS_HOST', '', true),
+                    port: getEnv('REDIS_PORT', '', true),
+                    auth: getEnv('REDIS_PASS', '', true),
+                },
+            });
+            this.queue.setMaxListeners(this.queue.getMaxListeners() + 1);
+            this.loadCron();
+        }
+    }
 
-const subtitleQueue = () => {
-    Queue.process('subtitles_upload', 1, (job: Job, done: DoneCallback) => {
-        SubtitleUploadJob(job.data);
-        done();
-    });
-};
+    protected subtitleQueue() {
+        this.queue.process(
+            'subtitles_upload',
+            1,
+            (job: Job, done: DoneCallback) => {
+                SubtitleUploadJob(job.data);
+                done();
+            }
+        );
+    }
 
-const translationQueue = () => {
-    Queue.process('translation_process', 1, (job: Job, done: DoneCallback) => {
-        TranslationProcessJob(job.data);
-        done();
-    });
-};
+    protected translationQueue() {
+        this.queue.process(
+            'translation_process',
+            1,
+            (job: Job, done: DoneCallback) => {
+                TranslationProcessJob(job.data);
+                done();
+            }
+        );
+    }
 
-const loadQueueUi = (server: Application) => {
-    server.use('/queues/', kueUi.app);
-    server.use('/queues/api', kue.app);
-    kueUi.setup({
-        apiURL: '/queues/api',
-        baseURL: '/queues',
-    });
-};
+    protected loadCron() {
+        cronJob.schedule('* * * * * *', () => {
+            this.subtitleQueue();
+            this.translationQueue();
+        });
+    }
+}
 
-const loadCron = () => {
-    cronJob.schedule('* * * * * *', () => {
-        subtitleQueue();
-        translationQueue();
-    });
-};
-
-export { Queue, loadQueueUi, loadCron };
+export default new Queue();

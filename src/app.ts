@@ -1,19 +1,19 @@
 import createConnection from '@database';
 import Handler from '@errors/handler.error';
 import IConfig from '@interfaces/configs';
-import { loadQueueUi, loadCron } from '@queue';
+import Queue from '@queue';
 import routes from '@routes/index';
 import { autoloadConfig, getBaseDir } from '@utils/helper';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import express, { Application } from 'express';
-
-const Minio = require('minio');
+import kue from 'kue';
+import kueUi from 'kue-ui';
 
 class App {
     public server: Application;
     public configObject: IConfig;
-    public minio: unknown;
+    public queue: typeof Queue;
 
     constructor() {
         this.loadConfigurations();
@@ -21,10 +21,8 @@ class App {
         this.middlewares();
         this.routes();
         this.mongoDatabase();
-        this.minioBucket();
         this.errorHandling();
-        loadCron();
-        loadQueueUi(this.server);
+        this.queue = Queue;
     }
 
     private loadConfigurations() {
@@ -39,6 +37,12 @@ class App {
                 extended: true,
             })
         );
+        this.server.use('/queues/', kueUi.app);
+        this.server.use('/queues/api', kue.app);
+        kueUi.setup({
+            apiURL: '/queues/api',
+            baseURL: '/queues',
+        });
     }
 
     private routes() {
@@ -60,17 +64,6 @@ class App {
             return res.status(500).json({
                 msg: error.message,
             });
-        });
-    }
-
-    private minioBucket() {
-        const minioConfigs = this.configObject.app.minio;
-
-        this.minio = new Minio.Client({
-            endPoint: minioConfigs.host,
-            useSSL: false,
-            accessKey: minioConfigs.user,
-            secretKey: minioConfigs.pass,
         });
     }
 }

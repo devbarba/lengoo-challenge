@@ -1,6 +1,6 @@
+import app from '@app';
 import { IRoute, IResponse } from '@interfaces/route';
 import { ISubtitle } from '@interfaces/subtitle';
-import { Queue } from '@queue';
 import { OK } from 'http-status';
 
 interface ISubtitleController {
@@ -15,12 +15,13 @@ class SubtitleController implements ISubtitleController {
             if (req.files) {
                 // @ts-ignore
                 req.files.forEach((file) => {
-                    Queue.create('subtitles_upload', {
-                        sourceLanguage: languages.sourceLanguage,
-                        targetLanguage: languages.targetLanguage,
-                        file,
-                        _user: req.user.id,
-                    })
+                    app.queue.queue
+                        .create('subtitles_upload', {
+                            sourceLanguage: languages.sourceLanguage,
+                            targetLanguage: languages.targetLanguage,
+                            file,
+                            _user: req.user.id,
+                        })
                         .removeOnComplete(true)
                         .attempts(3)
                         .save();
