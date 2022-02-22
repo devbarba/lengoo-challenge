@@ -12,7 +12,6 @@ import {
 import mongoose from 'mongoose';
 import request from 'supertest';
 
-import { validationResponses } from '../__mocks__/payloads.mock';
 import { token } from '../__mocks__/token.mock';
 
 describe('/api/users', () => {

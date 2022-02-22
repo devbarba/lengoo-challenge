@@ -35,7 +35,7 @@ class TranslationController implements ITranslationController {
             );
 
             return res.status(OK).json({
-                msg: 'Successfully inserted translations',
+                msg: 'successfully inserted translations',
                 data: insertedTranslations,
             });
         } catch (error) {
