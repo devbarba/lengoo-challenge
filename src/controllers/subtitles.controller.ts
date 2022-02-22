@@ -12,7 +12,7 @@ class SubtitleController implements ISubtitleController {
         try {
             const languages: ISubtitle = req.body;
 
-            if (req.files) {
+            if (req.files && app.queue && app.queue.queue !== undefined) {
                 // @ts-ignore
                 req.files.forEach((file) => {
                     app.queue.queue
