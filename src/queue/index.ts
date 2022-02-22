@@ -17,6 +17,8 @@ const Queue = kue.createQueue({
     },
 });
 
+Queue.setMaxListeners(Queue.getMaxListeners() + 1);
+
 const subtitleQueue = () => {
     Queue.process('subtitles_upload', 1, (job: Job, done: DoneCallback) => {
         SubtitleUploadJob(job.data);
