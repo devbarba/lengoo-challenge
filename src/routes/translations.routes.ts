@@ -11,7 +11,7 @@ const translationsRouter = Router();
 translationsRouter.use(ensureAuthenticated);
 
 translationsRouter.post(
-    '/insert',
+    '/',
     (req: Request, res: Response, next: NextFunction) => {
         verifyFields(
             req.body,
@@ -27,7 +27,7 @@ translationsRouter.post(
                 .required()
         );
 
-        translationController.insert({ req, res, next });
+        translationController.create({ req, res, next });
     }
 );
 

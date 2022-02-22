@@ -1,5 +1,5 @@
 import Handler from '@errors/handler.error';
-import app from 'app';
+import app from '@app';
 import { Request, Response, NextFunction } from 'express';
 import { UNAUTHORIZED } from 'http-status';
 import { JwtPayload, verify } from 'jsonwebtoken';
