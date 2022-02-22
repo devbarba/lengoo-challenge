@@ -1,4 +1,5 @@
 import app from '@app';
+import { ISubtitle, SubtitleStatus } from '@interfaces/subtitle';
 import Subtitle from '@models/Subtitle';
 import { Queue } from '@queue';
 import { Client as MinioClient } from 'minio';
@@ -21,13 +22,14 @@ class SubtitleUploadJob {
                 Buffer.from(subtitles.file.buffer.data)
             );
 
-            await Subtitle.create({
+            const subtitle: ISubtitle = await Subtitle.create({
                 ...subtitles,
-                status: 'pending',
+                status: SubtitleStatus.PENDING,
                 file: fileName,
             });
 
             Queue.create('translation_process', {
+                id: String(subtitle._id),
                 fileName,
             })
                 .removeOnComplete(true)
@@ -35,7 +37,11 @@ class SubtitleUploadJob {
                 .delay(1000)
                 .save();
         } catch (error) {
-            console.log(error);
+            await Subtitle.create({
+                ...subtitles,
+                status: SubtitleStatus.FAILED,
+                file: `${Date.now()}-${subtitles.file.originalname}`,
+            });
         }
     }
 }
