@@ -24,7 +24,7 @@ const Subtitle = new Schema(
             required: true,
         },
         file: {
-            type: Schema.Types.Mixed,
+            type: String,
             required: true,
         },
         status: {

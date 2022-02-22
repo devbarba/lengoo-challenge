@@ -23,10 +23,7 @@ class SubtitleUploadJob {
             await Subtitle.create({
                 ...subtitles,
                 status: 'pending',
-                file: {
-                    name: fileName,
-                    url: `http://${app.configObject.app.minio.host}:9000/lengoo/${fileName}`,
-                },
+                file: fileName,
             });
         } catch (error) {
             console.log(error);

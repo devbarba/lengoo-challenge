@@ -8,10 +8,8 @@ enum SubtitleStatus {
 }
 
 interface ISubtitleFile {
-    name: string;
     originalname?: string;
     buffer?: unknown;
-    url: string;
 }
 
 interface ISubtitle {
@@ -19,7 +17,7 @@ interface ISubtitle {
     _user?: ObjectId;
     sourceLanguage: string;
     targetLanguage: string;
-    files: ISubtitleFile;
+    file: string;
     status?: SubtitleStatus;
 }
 
