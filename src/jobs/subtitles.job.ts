@@ -1,5 +1,6 @@
 import app from '@app';
 import Subtitle from '@models/Subtitle';
+import { Queue } from '@queue';
 import { Client as MinioClient } from 'minio';
 
 class SubtitleUploadJob {
@@ -25,6 +26,14 @@ class SubtitleUploadJob {
                 status: 'pending',
                 file: fileName,
             });
+
+            Queue.create('translation_process', {
+                fileName,
+            })
+                .removeOnComplete(true)
+                .attempts(3)
+                .delay(1000)
+                .save();
         } catch (error) {
             console.log(error);
         }
