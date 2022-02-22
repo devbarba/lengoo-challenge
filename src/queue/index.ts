@@ -18,12 +18,7 @@ const Queue = kue.createQueue({
 
 const translationQueue = () => {
     Queue.process('subtitles_upload', 1, (job: Job, done: DoneCallback) => {
-        try {
-            SubtitleUploadJob(job.data);
-        } catch (error) {
-            console.log(error);
-        }
-
+        SubtitleUploadJob(job.data);
         done();
     });
 };
