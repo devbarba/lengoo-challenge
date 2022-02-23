@@ -1,132 +1,483 @@
-# Lengoo Coding Challenge: NodeJS
 
-Congratulations on making it to the coding challenge step of recruiting @ Lengoo!
+# Lengoo Backend Challenge
 
-You've already impressed our Recruiting partner, as well as one of our key Engineers. You are now at the most important part of the process, which is an opportunity to show us your coding skills. We can't wait to see what you have in store for us.
+## Intro
+
+Challenge proposed by Lengoo on a selection process for a back-end Developer role that consists of developing a back-end application, with the following requirements:
+
+- Create a REST API for uploading subtitles in a plain text format (.txt) and send an email with the translation as attachment once the process done.
+- Create the TMS either inside or outside the document translator (however you feel is the best way) with the two endpoints stated before.
+- The task must be developed with NodeJS.
+- All code as well as documentation or comments must be in English.
+- The code must run. You can assume the reviewer has NodeJS and docker on their machine, but no databases or other runtimes.
+
+First of all I would like to thank you for the opportunity to be able to take the test.
+
+## Demonstration
+
+  Demo Video: [https://youtu.be/zceskWPYcyw](https://youtu.be/zceskWPYcyw)
+
+## Architecture
+![Architeture](./resources/architecture.png)
+
+## Services Management
+
+AS you can see I'm using Mailhog to send mails, Minio to storage files, and Kue to schedule jobs in a redis. You can access all this interfaces just going trough:
+
+**Minio** - *Visualize files.* - [[Access](http://0.0.0.0:9001), [Print](./resources/minio.png)]
+
+**Mailhog** - *Visualize mails with processed translations.* - [[Access](http://0.0.0.0:8025), [Print](./resources/mailhog.png)]
+
+**Kue Api** - *Visualize jobs by status.* - [[Access](http://0.0.0.0:9004/queues/api), [Print](./resources/kue.queues.png)]
+
+**Kue Queues** - *Visualize jobs by Queues.* - [[Access](http://0.0.0.0:9004/queues), [Print](./resources/kue.api.png)]
+
+*PS: Credentials to access minio UI are inside .env.example*
+
+## Project Behavior
+
+- **INFRASTRUCTURE**
+
+  Docker was used to facilitate the environment, in this case the database(mongoDB), file storage(Minio), mail sender(Mailhog), message broker(Redis) to manage background jobs and of course the the creation of the DB, collections for later import and all init project configurations.
+
+- **AUTHENTICATION**
+
+  Due to the fact that the security of an API is essential, I performed the implementation of authentication with JWT being necessary in the header of each request in the Authorization field to insert the JWT token acquired from `[GET] - /api/auth`.
+
+- **API**
+
+  For the routes exhibition on REST model with JSON format I did use the Express micro-framework for being very lean, simple to work with and highly customizable. I could use Hapi or NestJS for example without any problem.
+
+- **TESTS**
+
+  To perform unitary tests I did use Jest for both (integratin and unit). For integration tests I did use Supertest.
+
+- **BACKGROUND JOBS**
+  I have 2 Jobs, the first one is the upload job, it's triggered by the `[POST] - /api/subtitles/upload` responsible for upload the subtitles file inside Minio, register data inside mongodb and schedule the seconde one JOB tho translate subtitles that runs every minute using cron jobs. As I said the second job do the translation work triggered by the first one and search inside mongoDB for the subtitle, translate and send the result by mail for the user using Mailhog.
+
+## Primarily Used Technologies
+
+- [Node](https://nodejs.org/en/) - 14.17.0
+- [Yarn](https://yarnpkg.com/) - 1.22.17
+- [Jest](https://jestjs.io/) - 27.5.1
+- [Dotenv-Safe](https://www.npmjs.com/package/dotenv-safe) - 8.2.0
+- [Express](https://expressjs.com/) - 4.17.2
+- [Mongoose](https://mongoosejs.com/) - 5.13.7
+- [Supertest](https://www.npmjs.com/package/supertest) - 6.2.2
+- [Babel](https://babeljs.io/) - 7.17.0
+- [Eslint](https://eslint.org/) - 8.9.0
+- [Joi](https://joi.dev/) - 17.6.0
+- [Kue](https://www.npmjs.com/package/kue) - 0.11.6
+- [Minio](https://min.io/)
+- [Redis](https://redis.io/)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Mailhog](https://github.com/mailhog/MailHog)
+
+## Instalation
+
+### Prerequisites
+
+To run on docker you only need to have `docker version 20.10.5` or greather and `docker-compose version 1.29.0` or greather installed, but if you wanna to run locally, will need aditionally to have Node installed in version v12.x.x or v14.x.x.
+
+### Phases
+
+To run the application on your machine, follow these steps:
+
+#### Docker
+
+1. git clone [https://github.com/lengoo/harbs-backend-coding-challenge](https://github.com/lengoo/harbs-backend-coding-challenge)
+
+2. `cd harbs-backend-coding-challenge` to access the project folder.
+
+3. `git checkout development` to go to development branch.
+
+4. `docker-compose up -d --build` it will run all necessary things.
+
+#### Local
 
 
-## How to approach this challenge
+1. git clone [https://github.com/lengoo/harbs-backend-coding-challenge](https://github.com/lengoo/harbs-backend-coding-challenge)
 
-You'll find below a set of requirements. You are expected to deliver an implementation of those requirements using tools of your choice, with only a few constraints.
+2. `cd harbs-backend-coding-challenge` to access the project folder.
 
-We will evaluate your submission as a whole. That means we'll pay attention to:
+3. `yarn` or `npm install` to performs installation of dependencies.
 
-- Does your solution work?
-- Did you follow the instructions?
-- Is your code easy to understand and maintain?
-- Have you documented your approach so that a reviewer can understand your thought process, choices and tradeoffs?
+4. `cp .env.example .env` to copy environment variables.
 
-This is exactly how you can expect daily work at Lengoo to be.
+5. `yarn importData` or `npm run importData` for import the default api user.
+6. `yarn build` or `npm run build` to build the application.
 
-A successful challenge will be reviewed together with you, and you'll have a chance to answer questions, elaborate on tradeoffs, and offer ideas of things that are missing but could have been done with more time.
+7. `yarn start` or `npm run start` to run the application.
 
-### Timeline
+*PS: `yarn dev` to run on dev mode.*
 
-This challenge can take as little as a few hours. Quantity does not equal quality. Please do give us a sample of what you can do, but there is no need to overdeliver. It's possible to deliver a pragmatic, tight solution that still showcases lots of technique and knowledge.
+*PS: If you wanna to run local without docker, go to created `.env` file and change the value for `127.0.0.1` or `0.0.0.0`: from these envs: `MONGO_HOST, REDIS_HOST, MAILHOG_HOST and MINIO_HOST.`*
 
----
-
-## Instructions
-These are important. Please follow them carefully.
-
-1. Clone this repo.
-2. Create a new `development` branch.
-3. Use commits liberally. We'd love to read through your progress. Good commit messages are valuable.
-4. After finishing your work, create a Pull Request to the master branch. Please describe your approach, limitations, tradeoffs, running instructions, and anything that you would be interested in knowing if you were reviewing the code. This is extremely important.
-5. Keep an eye on the Pull Request, as our team might ask you questions in the PR comments.
+## CURL to test API
 
 
-## Business requirements
-
-You are asked to implement a Subtitles Translation service.
-
-It takes one or more subtitle files as input, and returns files with the translated subtitles. The translation is performed by using historical data stored in a [Translation Management System (TMS)](https://en.wikipedia.org/wiki/Translation_management_system). Each translation is performed by going through the following steps:
-
-1. Parses the subtitles file and extract the translatable source.
-2. Translates the source using historical data.
-3. Pairs the result with the source.
-4. Reconstructs the subtitles file.
-
-Below you can find an example of what a subtitles file looks like:
-
+```shell
+curl --request GET --url http://0.0.0.0:9004/api
 ```
-1 [00:00:12.00 - 00:01:20.00] I am Arwen - I've come to help you.
-2 [00:03:55.00 - 00:04:20.00] Come back to the light.
-3 [00:04:59.00 - 00:05:30.00] Nooo, my precious!!.
+
+## Tests
+
+Code coverage: `82.05%`.
+
+To run the integration and unit tests run the following command: `yarn test`
+
+# End-points
+
+  To user our endpoints you need to get logged in `[GET] - /api/auth` using credentials that you will create or just use for the first auth , credentials that are inserted on docker startup because for get all endpoints you need to be logged first, follow bellow:
+
+  ```shell
+    {
+		"email": "challenge@lengoo.com",
+		"pass": "123456"
+    }
+  ```
+
+  Insomnia Collection: [Clique here to get the insomnia collecton](./resources/insomnia-collection.json)
+
+### Records
+
+| resource                  | description                       |
+| :------------------------ | :-------------------------------- |
+| `/api` **GET** | Health Check |
+
+`/api` **GET** - **[200 - OK]**
+
+**RESPONSE**
+```shell
+{
+	"timestamp": "1645605454688",
+}
+```
+___
+
+| resource                  | description                       |
+| :------------------------ | :-------------------------------- |
+| `/api/auth` **POST** | Authtentication Route |
+
+`/api/auth` **POST** - **[200 - OK]**
+
+**REQUEST - Expected Payload**
+```shell
+{
+	"email": "challenge@lengoo.com",
+	"password": "123456"
+}
 ```
 
-As you can see, a subtitle is defined by the id of the line, the time range, and then the content to be translated.
-
-The output for this input would be a new file containing something like:
-
+**RESPONSE**
+```shell
+{
+	"data": {
+		"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NDU2MDU1MzYsImV4cCI6MTY0NTY5MTkzNiwic3ViIjoiNGM2NTZlNjc2ZjZmNGM2NTZlNjc2ZjZmIn0.Doy0effpBUiHWmpsq1vhrbwV8134lUXa8HOaa5HVUR4"
+	}
+}
 ```
-1 [00:00:12.00 - 00:01:20.00] Ich bin Arwen - Ich bin gekommen, um dir zu helfen.
-2 [00:03:55.00 - 00:04:20.00] Komm zurück zum Licht.
-3 [00:04:59.00 - 00:05:30.00] Nein, my Schatz!!.
+
+`/api/auth` **POST** - **[412 - PRECONDITION FAILED]**
+
+**REQUEST - When some field are missing**
+```shell
+{
+	"email": "challenge@lengoo.com"
+}
 ```
 
-The second part of the system is the aforementioned TMS. As its name states, it's a system that stores past translations so they can be reused. A TMS can be relatively straightforward: two endpoints, one for adding data, another for translating content.
+**RESPONSE**
+```shell
+{
+	"msg": "password is required"
+}
+```
 
-A TMS translation happens according to this flow:
+`/api/auth` **POST** - **[401 - UNAUTHORIZED]**
 
-1. Search for strings that are **approximately** equal in the database — They might not be the same but close enough to be consider a translation.
-2. It calculates the distance between the query and the closest string found. — A standard way of calculating strings distance is by using [Levenshtein distance algorithm](https://en.wikipedia.org/wiki/Levenshtein_distance).
-3. If using Levenshtein, a distance of less than 5 is considered a translation.
-4. If no translation is found, the TMS returns the input as a result.
+**REQUEST - When passed information are incorrect or inexistent**
+```shell
+{
+	"email": "challenge@lengoo.com",
+    "password": "abcdefghij"
+}
+```
 
-For importing data, the following structure is used:
+**RESPONSE**
+```shell
+{
+	"msg": "incorrect email/password combination"
+}
+```
+___
 
-```json
+| resource                  | description                       |
+| :------------------------ | :-------------------------------- |
+| `/api/users` **GET** | Read registered users |
+| Authorization | Bearer `token` |
+
+`/api/auth` **GET** - **[200 - OK]**
+
+**RESPONSE**
+```shell
+{
+	"data": [
+		{
+			"_id": "4c656e676f6f4c656e676f6f",
+			"name": "Lengoo",
+			"email": "challenge@lengoo.com",
+			"role": "Admin",
+			"active": true,
+			"createdAt": "2022-02-21T11:12:08.739Z",
+			"updatedAt": "2022-02-21T11:12:08.739Z"
+		}
+	]
+}
+```
+
+`/api/auth` **GET** - **[404 - NOT FOUND]**
+
+**RESPONSE - When doesn't exist users**
+```shell
+{
+	"msg": "no query results found"
+}
+```
+
+| resource                  | description                       |
+| :------------------------ | :-------------------------------- |
+| `/api/users` **POST** | Create a user |
+| Authorization | Bearer `token` |
+
+`/api/auth` **POST** - **[200 - OK]**
+
+**REQUEST**
+```shell
+{
+	"name": "João Pedro Harbs",
+	"email": "harbspj@gmail.com",
+	"role": "Client",
+	"password": "123456",
+	"password_confirmation": "123456"
+}
+```
+
+**RESPONSE**
+```shell
+{
+	"data": {
+		"_id": "6215f26a915b9e0054df2949",
+		"name": "João Pedro Harbs",
+		"email": "harbspj@gmail.com",
+		"role": "Client",
+		"active": true,
+		"password": "$2a$08$D2Wt2OeDC8lIs..mB5MyiOPXpVsnergZfk64Kbc1eDvv4Ii.9/PYi",
+		"createdAt": "2022-02-23T08:38:02.064Z",
+		"updatedAt": "2022-02-23T08:38:02.064Z",
+		"__v": 0
+	}
+}
+```
+
+`/api/auth` **POST** - **[409 - CONFLICT]**
+
+**REQUEST - When user already exists**
+```shell
+{
+	"name": "João Pedro Harbs",
+	"email": "harbspj@gmail.com",
+	"role": "Client",
+	"password": "123456",
+	"password_confirmation": "123456"
+}
+```
+
+**RESPONSE**
+```shell
+{
+	"msg": "email address already used"
+}
+```
+
+`/api/auth` **POST** - **[412 - PRECONDITION FAILED]**
+
+**REQUEST - When some field is missing**
+```shell
+{
+	"name": "João Pedro Harbs",
+	"email": "harbspj@gmail.com",
+	"role": "Client",
+	"password_confirmation": "123456"
+}
+```
+
+**RESPONSE**
+```shell
+{
+	"msg": "password is required"
+}
+```
+
+| resource                  | description                       |
+| :------------------------ | :-------------------------------- |
+| `/api/users/:uuid` **DELETE** | Delete User |
+| Authorization | Bearer `token` |
+
+`/api/auth` **DELETE** - **[204 - NO CONTENT]**
+
+**RESPONSE - Successful deletion**
+```shell
+```
+
+`/api/auth` **DELETE** - **[404 - NOT FOUND]**
+
+**RESPONSE - When user doesn't exists**
+```shell
+{
+	"msg": "user not found"
+}
+```
+___
+
+| resource                  | description                       |
+| :------------------------ | :-------------------------------- |
+| `/api/translations` **POST** | Insert translations |
+| Authorization | Bearer `token` |
+
+`/api/auth` **DELETE** - **[200 - OK]**
+
+**REQUEST**
+```shell
 [
   {
-    "source": "Hello World",
-    "target": "Hallo Welt",
+    "source": "Hello",
+    "target": "Hallo",
 		"sourceLanguage": "en",
 		"targetLanguage": "de"
   },
   {
-    "source": "Hello guys",
-    "target": "Hallo Leute",
+    "source": "Come back to the light.",
+    "target": "Komm zurück zum Licht.",
 		"sourceLanguage": "en",
 		"targetLanguage": "de"
   },
   {
-    "source": "I walk to the supermarket",
-    "target": "Ich gehe zum Supermarkt.",
-		"sourceLanguage": "en",
-		"targetLanguage": "de"
+    "source": "Nooo, my precious!!.",
+    "target": "Nein, my Schatz!!.",
+    "sourceLanguage": "en",
+    "targetLanguage": "de"
   }
 ]
 ```
 
-Feel free to define the API contracts and the project structure on your own.
+**RESPONSE**
+```shell
+{
+	"msg": "successfully inserted translations",
+	"data": [
+		{
+			"_id": "621533a767bff160dfa8e6a7",
+			"_user": "4c656e676f6f4c656e676f6f",
+			"source": "Hello",
+			"sourceLanguage": "en",
+			"target": "Hallo",
+			"targetLanguage": "de",
+			"__v": 0,
+			"createdAt": "2022-02-22T19:04:07.504Z",
+			"updatedAt": "2022-02-23T08:38:39.879Z"
+		},
+		{
+			"_id": "6214cba367bff160dfa8b306",
+			"_user": "4c656e676f6f4c656e676f6f",
+			"source": "Come back to the light.",
+			"sourceLanguage": "en",
+			"target": "Komm zurück zum Licht.",
+			"targetLanguage": "de",
+			"__v": 0,
+			"createdAt": "2022-02-22T11:40:19.292Z",
+			"updatedAt": "2022-02-23T08:38:39.880Z"
+		},
+		{
+			"_id": "6214cba367bff160dfa8b308",
+			"_user": "4c656e676f6f4c656e676f6f",
+			"source": "Nooo, my precious!!.",
+			"sourceLanguage": "en",
+			"target": "Nein, my Schatz!!.",
+			"targetLanguage": "de",
+			"__v": 0,
+			"createdAt": "2022-02-22T11:40:19.292Z",
+			"updatedAt": "2022-02-23T08:38:39.880Z"
+		}
+	]
+}
+```
 
+`/api/auth` **DELETE** - **[412 - PRECONDITION FAILED]**
 
-## Technical requirements
+**REQUEST**
+```shell
+[
+  {
+    "target": "Hallo",
+    "sourceLanguage": "en",
+    "targetLanguage": "de"
+  }
+]
+```
 
-1. Create a REST API for uploading subtitles in a plain text format (.txt) and send an email with the translation as attachment once the process done.
-2. Create the TMS either inside or outside the document translator (however you feel is the best way) with the two endpoints stated before.
-3. The task must be developed with NodeJS.
-4. All code as well as documentation or comments must be in English.
-5. The code must run. You can assume the reviewer has NodeJS and docker on their machine, but no databases or other runtimes.
+**RESPONSE**
+```shell
+{
+	"msg": "[0].source is required"
+}
+```
+___
 
+| resource                  | description                       |
+| :------------------------ | :-------------------------------- |
+| `/api/subtitles/upload` **POST** | Upload subtitles to translate |
+| Authorization | Bearer `token` |
+| Content-Type | multipart/form-data|
 
-### Evaluation criteria
-These are how we evaluate coding challenges. Please refer back to the earlier part of this document for details.
+`/api/auth` **DELETE** - **[200 - OK]**
 
-1. Does the solution work
-2. Is the code clean and understandable
-3. Is the code tested
-4. Is the solution well documented
-5. Were all instructions followed
+**REQUEST**
+```shell
+{
+    "sourceLanguage": "en",
+    "targetLanguage" : "de",
+    "files": "file.txt here"
+}
+```
 
-### Strech goals
-These will count in your favour but are not required for success:
+*PS: You can upload multiple files*
 
-- Usage of Typescript
-- Usage of Docker
+**RESPONSE**
+```shell
+{
+	"msg": "subtitles sent to translate, you will receive in your registered email when we finish the job"
+}
+```
 
----
+`/api/auth` **DELETE** - **[412 - PRECONDITION FAILED]**
 
+**REQUEST - When some field is missing**
+```shell
+{
+    "targetLanguage" : "de",
+    "files": "file.txt here"
+}
+```
 
-Good luck!
+**RESPONSE**
+```shell
+{
+	"msg": "sourceLanguage is required"
+}
+```
+
+## Author
+
+[João Harbs](https://github.com/devbarba)
