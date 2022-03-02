@@ -86,7 +86,7 @@ To run the application on your machine, follow these steps:
 
 #### Docker
 
-1. git clone [https://github.com/lengoo/harbs-backend-coding-challenge](https://github.com/lengoo/harbs-backend-coding-challenge)
+1. git clone [https://github.com/devbarba/lengoo-challenge](https://github.com/devbarba/lengoo-challenge)
 
 2. `cd harbs-backend-coding-challenge` to access the project folder.
 
@@ -97,7 +97,7 @@ To run the application on your machine, follow these steps:
 #### Local
 
 
-1. git clone [https://github.com/lengoo/harbs-backend-coding-challenge](https://github.com/lengoo/harbs-backend-coding-challenge)
+1. git clone [https://github.com/devbarba/lengoo-challenge](https://github.com/devbarba/lengoo-challenge)
 
 2. `cd harbs-backend-coding-challenge` to access the project folder.
 
